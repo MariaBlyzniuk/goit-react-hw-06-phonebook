@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import actions from '../../redux/contacts/actions';
-import { getContacts } from '../../redux/contacts/selectors';
+import {addContact} from '../../redux/contacts/contactsSlice';
+import { nanoid } from 'nanoid';
 import Notiflix from 'notiflix';
 import { FormStyle, Label, Input, Button } from './ContactForm.styled';
 
 export function ContactForm() {
     const dispatch = useDispatch();
-    const contacts = useSelector(getContacts);
+    const contacts = useSelector(state => state.contact.contacts);
 
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
@@ -37,7 +37,7 @@ export function ContactForm() {
     }
     contacts.find(contact => name.toLowerCase() === contact.name.toLowerCase())
         ? Notiflix.Report.failure(`${name} is already in contacts`)
-        : dispatch(actions.addContact({ name, number }));
+        : dispatch(addContact({ id: nanoid(3), name, number }));
     reset();
     };
     
@@ -81,6 +81,3 @@ export function ContactForm() {
         </FormStyle>
     );
 }
-
-
-
